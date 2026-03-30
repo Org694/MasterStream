@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BubblePop Master | Level 1-100</title>
+    <style>
+        :root { --primary: #ff4757; --bg: #2f3542; --panel: #ffffff; }
+        body { font-family: sans-serif; background-color: var(--bg); margin: 0; display: flex; justify-content: center; align-items: center; height: 100vh; color: #333; }
+
+        #game-container { width: 350px; height: 600px; background: #2f3542; border-radius: 20px; position: relative; overflow: hidden; border: 4px solid #57606f; }
+
+        .top-bar { padding: 15px; display: flex; justify-content: space-between; align-items: center; color: white; background: rgba(0,0,0,0.2); }
+
+        /* Level Progress Bar */
+        .progress-container { width: 100%; height: 10px; background: #444; position: absolute; top: 60px; }
+        #progress-bar { width: 1%; height: 100%; background: #2ed573; transition: 0.3s; }
+
+        .game-area { height: 400px; display: flex; justify-content: center; align-items: center; flex-direction: column; }
+        
+        .bubble { 
+            width: 100px; height: 100px; background: radial-gradient(circle at 30% 30%, #ff6b81, #ff4757); 
+            border-radius: 50%; cursor: pointer; display: flex; justify-content: center; align-items: center;
+            color: white; font-weight: bold; font-size: 1.2rem; box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+            transition: transform 0.1s;
+        }
+        .bubble:active { transform: scale(0.9); }
+
+        /* Modals */
+        .modal { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 80%; background: var(--panel); border-radius: 15px; padding: 20px; display: none; z-index: 100; text-align: center; }
+        .modal.active { display: block; }
+        #overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: none; z-index: 90; }
+
+        .cert-badge { background: #f1f2f6; border-left: 4px solid #ffa502; padding: 10px; margin: 10px 0; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div class="top-bar">
+        <span>Level: <strong id="levelDisp">1</strong></span>
+        <button onclick="toggleModal('settingsModal')">Settings ⚙️</button>
+    </div>
+
+    <div class="progress-container">
+        <div id="progress-bar"></div>
+    </div>
+
+    <div class="game-area">
+        <div class="bubble" onclick="popBubble()">POP!</div>
+        <p style="color: #ccc; margin-top: 20px;">Pop to reach Level 100</p>
+    </div>
+
+    <div id="winModal" class="modal">
+        <h2>🎉 CHAMPION!</h2>
+        <p>You finished Level 100!</p>
+        <div class="cert-badge">Official 2026 Certified Master</div>
+        <button onclick="location.reload()" style="padding: 10px; background: #2ed573; border: none; color: white; border-radius: 5px;">Play Again</button>
+    </div>
+
+    <div id="settingsModal" class="modal">
+        <h3>Settings</h3>
+        <button onclick="openAbout()" style="width: 100%; padding: 10px; margin-bottom: 10px;">About</button>
+        <button onclick="toggleModal('settingsModal')">Close</button>
+    </div>
+
+    <div id="aboutModal" class="modal">
+        <h3>About Master</h3>
+        <p>Premium 2026 High-Performance Gaming.</p>
+        <div class="cert-badge">2026 CERTIFIED A+</div>
+        <button onclick="backToSettings()">Back</button>
+    </div>
+
+    <div id="overlay"></div>
+</div>
+
+<script>
+    let currentLevel = 1;
+    const maxLevel = 100;
+
+    function popBubble() {
+        if (currentLevel < maxLevel) {
+            currentLevel++;
+            updateUI();
+        } else {
+            showWin();
+        }
+    }
+
+    function updateUI() {
+        document.getElementById('levelDisp').innerText = currentLevel;
+        let progress = (currentLevel / maxLevel) * 100;
+        document.getElementById('progress-bar').style.width = progress + "%";
+    }
+
+    function showWin() {
+        document.getElementById('overlay').style.display = 'block';
+        document.getElementById('winModal').classList.add('active');
+    }
+
+    function toggleModal(id) {
+        const modal = document.getElementById(id);
+        const overlay = document.getElementById('overlay');
+        modal.classList.toggle('active');
+        overlay.style.display = modal.classList.contains('active') ? 'block' : 'none';
+    }
+
+    function openAbout() {
+        document.getElementById('settingsModal').classList.remove('active');
+        document.getElementById('aboutModal').classList.add('active');
+    }
+
+    function backToSettings() {
+        document.getElementById('aboutModal').classList.remove('active');
+        document.getElementById('settingsModal').classList.add('active');
+    }
+</script>
+
+</body>
+</html>
